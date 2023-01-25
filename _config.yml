@@ -19,19 +19,30 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Nicola Fanelli
-email: nicola.fanelli16@gmail.com
+author:
+  name: Nicola Fanelli
+  email: nicola.fanelli16@gmail.com
+
 description: >- # this means to ignore newlines until "baseurl:"
-  My personal blog.
+  My personal blog
 domain: nicolafan.github.io
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://nicolafan.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
 
 # Build settings
-theme: minima
+remote_theme: jekyll/minima
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
+
+minima:
+  skin: dark
+  social_links:
+    - { platform: github,         user_url: "https://github.com/nicolafan" }
+    - { platform: linkedin,       user_url: "https://www.linkedin.com/in/nicola-fanelli-920602167" }
+    - { platform: stackoverflow,  user_url: "https://stackoverflow.com/users/10902946/nicola-fanelli" }
+    - { platform: twitter,        user_url: "https://twitter.com/nicolafan_" }
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.
