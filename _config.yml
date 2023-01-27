@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Nicola Fanelli - Blog of an AI Student
+title: Nicola Fanelli
 author:
   name: Nicola Fanelli
   email: nicola.fanelli16@gmail.com

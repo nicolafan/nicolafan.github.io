@@ -53,7 +53,7 @@ I was in highschool when I started programming. The introduction to programming 
 
 I chose a technical institute where I studied subjects related to economics and IT. Concerning IT, at school we focused on databases and basic concepts about networks.
 
-I still didn't know that I wanted to study Computer Science; actually I was thinking that I would've studied something about business at the university.
+I didn't know yet that I wanted to study Computer Science; actually I was thinking that I would've studied something about business at the university.
 
 After school I was called for an internship in a software house in my city, and I gave it a try. During this brief experience I've had the possibility of looking for the first time at a codebase, making small changes, connecting to servers via SSH, using Linux and reading books about programming, databases and operating systems. **I was falling in love with Computer Science and programming**, so I finally decided that I wanted to study CS!
 
