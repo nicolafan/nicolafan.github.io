@@ -8,8 +8,11 @@ let isDragging = false;
 let selectedDataPoint;
 
 canvas.addEventListener("mousedown", handleMouseDown);
+canvas.addEventListener("touchstart", handleMouseDown);
 canvas.addEventListener("mousemove", handleMouseMove);
+canvas.addEventListener("touchmove", handleMouseMove);
 canvas.addEventListener("mouseup", handleMouseUp);
+canvas.addEventListener("touchend", handleMouseUp);
 
 // A DataPoint
 class DataPoint {
