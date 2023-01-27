@@ -24,7 +24,7 @@ author:
   email: nicola.fanelli16@gmail.com
 
 description: >- # this means to ignore newlines until "baseurl:"
-  A random developer's blog
+  Blog of an AI Student
 domain: nicolafan.github.io
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://nicolafan.github.io" # the base hostname & protocol for your site, e.g. http://example.com
