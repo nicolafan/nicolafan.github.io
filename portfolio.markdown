@@ -8,7 +8,7 @@ These are some of my projects that are not related to university or work (in chr
 
 ## 10Rooms
 
-10 Rooms is a **Python arcade** in which the player must collect rubies in a haunted house without being touched by skeletons and ghosts.
+10Rooms is a **Python arcade** in which the player must collect rubies in a haunted house without being touched by skeletons and ghosts.
 
 [![Game Preview of 10Rooms](/assets/images/10rooms.png)](https://www.youtube.com/watch?v=FCYq24Nk26o)
 

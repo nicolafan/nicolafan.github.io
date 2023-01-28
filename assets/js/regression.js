@@ -1,7 +1,14 @@
 // globals
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-ctx.font = "12px Arial";
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+let height = 200;
+let width = 500;
+ctx.font = "12px Monospace"
+if (window.innerWidth < 480) {
+    canvas.width = 300;
+    width = 300;
+    ctx.font = "9px Monospace"
+}
 ctx.strokeStyle = "white";
 ctx.fillStyle = "white";
 let isDragging = false;
@@ -19,13 +26,13 @@ class DataPoint {
     constructor(x, y) {
       this.x = x;
       this.y = y;
-      this.r = 5;
+      this.r = 8;
       this.dragged = false;
     }
 
     draw() {
         let lastColor = ctx.fillStyle;
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "orange";
         ctx.beginPath();
         ctx.ellipse(this.x, this.y, this.r, this.r, 0, 0, 360);
         ctx.fill();
@@ -41,11 +48,11 @@ class Line {
     draw() {
         let lastColor = ctx.strokeStyle;
         let lastWidth = ctx.lineWidth;
-        ctx.strokeStyle = "blue";
-        ctx.lineWidth = 3;
-        let x = 150;
-        let y = 150;
-        let r = 300;
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 5;
+        let x = width/2;
+        let y = height/2;
+        let r = width;
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(x + r * Math.cos(this.angle), y + r * Math.sin(this.angle));
@@ -58,10 +65,10 @@ class Line {
 }
 
 let dataPoints = [
-    new DataPoint(280, 60),
-    new DataPoint(200, 90),
-    new DataPoint(250, 140),
-    new DataPoint(160, 130)
+    new DataPoint(width/2+20, height/2-20),
+    new DataPoint(width/2+40, height/2-40),
+    new DataPoint(width/2+100, height/2-10),
+    new DataPoint(width/2+120, height/2-80)
 ];
 
 let line = new Line(fitLine());
@@ -74,8 +81,16 @@ function drawDataPoints() {
 }
 
 function handleMouseDown(event) {
+    if (event.type === "mousedown") {
+        var offsetX = event.offsetX;
+        var offsetY = event.offsetY;
+     } else if (event.type === "touchstart") {
+        var touch = event.targetTouches[0];
+        var offsetX = touch.clientX - event.target.offsetLeft;
+        var offsetY = touch.clientY - event.target.offsetTop;
+    }
   dataPoints.forEach((dp) => {
-    if (isInsideCircle(event.offsetX, event.offsetY, dp)) {
+    if (isInsideCircle(offsetX, offsetY, dp)) {
       isDragging = true;
       selectedDataPoint = dp;
     }
@@ -83,9 +98,17 @@ function handleMouseDown(event) {
 }
 
 function handleMouseMove(event) {
+    if (event.type === "mousemove") {
+        var offsetX = event.offsetX;
+        var offsetY = event.offsetY;
+     } else if (event.type === "touchmove") {
+        var touch = event.targetTouches[0];
+        var offsetX = touch.clientX - event.target.offsetLeft;
+        var offsetY = touch.clientY - event.target.offsetTop;
+     }
     if (isDragging) {
-      selectedDataPoint.x = event.offsetX;
-      selectedDataPoint.y = event.offsetY;
+      selectedDataPoint.x = offsetX;
+      selectedDataPoint.y = offsetY;
       draw();
     }
 }
@@ -104,20 +127,20 @@ function isInsideCircle(x, y, circle) {
 
 function drawAxes() {
     ctx.beginPath();
-    ctx.moveTo(150, 300);
-    ctx.lineTo(150, 0);
-    ctx.lineTo(146, 4);
-    ctx.lineTo(154, 4);
-    ctx.lineTo(150, 0);
+    ctx.moveTo(width/2, height);
+    ctx.lineTo(width/2, 0);
+    ctx.lineTo(width/2-4, 4);
+    ctx.lineTo(width/2+4, 4);
+    ctx.lineTo(width/2, 0);
     ctx.stroke();
     ctx.fill();
 
     ctx.beginPath();
-    ctx.moveTo(0, 150);
-    ctx.lineTo(300, 150);
-    ctx.lineTo(296, 146);
-    ctx.lineTo(296, 154);
-    ctx.lineTo(300, 150);
+    ctx.moveTo(0, height/2);
+    ctx.lineTo(width, height/2);
+    ctx.lineTo(width-4, height/2-4);
+    ctx.lineTo(width-4, height/2+4);
+    ctx.lineTo(width, height/2);
     ctx.stroke();
     ctx.fill();
 }
@@ -127,7 +150,7 @@ function draw() {
     drawAxes();
     line.draw();
     drawDataPoints();
-    ctx.fillText("Move the data to fit a line", 164, 300);
+    ctx.fillText("Move the data to fit a line", width/2 + 15, height);
 }
 
 function fitLine() {
@@ -135,8 +158,8 @@ function fitLine() {
     let ys = [];
     
     dataPoints.forEach(dp => {
-        xs.push(dp.x - 150);
-        ys.push(-(dp.y - 150));
+        xs.push(dp.x - width/2);
+        ys.push(-(dp.y - height/2));
     })
 
     let num = 0
