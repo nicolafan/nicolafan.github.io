@@ -37,3 +37,5 @@ gem "webrick", "~> 1.7"
 gem "jemoji"
 
 gem "jekyll-paginate"
+
+gem "jekyll-sitemap"
