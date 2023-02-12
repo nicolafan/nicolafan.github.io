@@ -6,7 +6,7 @@ permalink: /portfolio/
 
 These are some of my projects that are not related to university or work (in chronological order on the date I started working on them).
 
-## 10Rooms
+## :skull: 10Rooms
 
 10Rooms is a **Python arcade** in which the player must collect rubies in a haunted house without being touched by skeletons and ghosts.
 
@@ -16,11 +16,11 @@ This is a small project I made while reading [Invent Your Own Computer Games wit
 
 I've also drawn the sprites for this project!
 
-### Links
+### :link: Links
 
 |[Itch.io](https://nicolafan.itch.io/10rooms)|[Youtube](https://www.youtube.com/watch?v=FCYq24Nk26o)|
 
-## PyLeague Soccer Simulation
+## :soccer: PyLeague Soccer Simulation
 
 PyLeague is a **software simulation of a soccer championship** developed using Python.
 
@@ -28,11 +28,11 @@ PyLeague is a **software simulation of a soccer championship** developed using P
 
 The goal of PyLeague is to provide the simulation of the course of one season in a realistical league (such as Lega A).
 
-### Links
+### :link: Links
 
 |[GitHub](https://github.com/nicolafan/pyleague-soccer-simulation)|
 
-## Pyker
+## :spades: Pyker
 
 Pyker is a **Desktop Poker Texas Hold'Em** game made with Python and Pygame!
 
@@ -42,7 +42,7 @@ I've developed this game because I wanted to challenge myself with the implement
 
 The implementation of the game and the interface should be finished, but I wish to refactor the code and to add tests in the future.
 
-### Links
+### :link: Links
 
 |[GitHub](https://github.com/nicolafan/pyker)|
 
