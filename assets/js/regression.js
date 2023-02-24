@@ -7,7 +7,7 @@ ctx.font = "12px Monospace"
 if (window.innerWidth < 480) {
     canvas.width = 300;
     width = 300;
-    ctx.font = "9px Monospace"
+    ctx.font = "8px Monospace"
 }
 ctx.strokeStyle = "white";
 ctx.fillStyle = "white";
@@ -81,6 +81,7 @@ function drawDataPoints() {
 }
 
 function handleMouseDown(event) {
+    event.preventDefault();
     if (event.type === "mousedown") {
         var offsetX = event.offsetX;
         var offsetY = event.offsetY;
@@ -98,6 +99,7 @@ function handleMouseDown(event) {
 }
 
 function handleMouseMove(event) {
+    event.preventDefault();
     if (event.type === "mousemove") {
         var offsetX = event.offsetX;
         var offsetY = event.offsetY;
@@ -114,6 +116,7 @@ function handleMouseMove(event) {
 }
 
 function handleMouseUp(event) {
+    event.preventDefault();
     isDragging = false;
     line.angle = fitLine();
     draw();
@@ -150,7 +153,7 @@ function draw() {
     drawAxes();
     line.draw();
     drawDataPoints();
-    ctx.fillText("Move the data to fit a line", width/2 + 15, height);
+    ctx.fillText("Move the points to fit a line", width/2 + 10, height-8);
 }
 
 function fitLine() {
