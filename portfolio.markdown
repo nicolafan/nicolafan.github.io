@@ -6,6 +6,17 @@ permalink: /portfolio/
 
 These are some of my projects that are not related to university or work (in chronological order on the date I started working on them).
 
+## :camera: Image Captioning with CNN and RNN
+A Tensorflow/Keras implementation of the model proposed in the 2015 paper ["Show and tell: A neural image caption generator."](https://arxiv.org/abs/1411.4555).
+
+![image-captioning-cnn-rnn training diagram](/assets/images/training_model.png)
+
+This implementation is easily editable to compare different model architectures and comprehends different stages of the process of training an image captioning model, from the creation of the TFRecords to access the images and the ground truth, to the visualization of the results and evaluation of the model using the BLEU metrics.
+
+### :link: Links
+
+|[GitHub](https://github.com/nicolafan/image-captioning-cnn-rnn)|
+
 ## :skull: 10Rooms
 
 10Rooms is a **Python arcade** in which the player must collect rubies in a haunted house without being touched by skeletons and ghosts.
