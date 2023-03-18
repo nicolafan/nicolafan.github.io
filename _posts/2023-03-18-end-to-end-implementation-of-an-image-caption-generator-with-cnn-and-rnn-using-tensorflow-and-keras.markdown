@@ -22,11 +22,19 @@ In 2015 Vinyals, Oriol, et al. published the paper *Show and Tell: A Neural Imag
 
 Their model architecture is composed of a **Convolutional Neural Network** used as an encoder for the image (Show) and a **Recurrent Neural Network** which receives the image encoding as an input and produces a caption for the image (Tell). In this way they put together the best Deep Learning architectures for working with images (CNN) and with sequence data (RNN). Today, RNN are being substituted by **Transformers** for NLP tasks, but they are still extensively used for working with other types of sequences (and they were the state-of-the-art for neural text processing in 2015).
 
-Mathematically, we want to train a Neural Network for producing the sequence of words $S$ that maximizes the conditional probability $p(S|I)$, where $I$ is the input image.
+Mathematically, we want to train a Neural Network for producing the sequence of words <span>$S$</span> that maximizes the conditional probability <span>$p(S|I)$</span>, where <span>$I$</span> is the input image.
 
-Based on this consideration, the training process will consist in finding the best model parameters $\theta$, that is finding the model parameters $\theta*$ such that $$\theta^* = arg\,max_{\theta}\sum_{(I, S)}log\,p(S|I;\theta)$$ where $(I, S)$ is an image-caption pair in the training set and the model parameters $\theta$ are the model weights we apprehend with backpropagation. 
+Based on this consideration, the training process will consist in finding the best model parameters <span>$\theta$</span>, that is finding the model parameters <span>$\theta^{\*}$</span> such that
 
-Since $S$ is considered to be a sequence of $N+1$ tokens $S_0, S_1, ..., S_N$ (where we use $S_0$ and $S_N$ to denote two special tokens $\langle start \rangle$ and $\langle end \rangle$), we can apply the **chain rule of probability**: $$p(S|I) = P(S_0, S_1, ..., S_N|I) = \prod_{t=0}^NP(S_t|I, S_0, S_1, ..., S_{t-1})$$ and model the last expression in the equations using an RNN, where information about the last $t-1$ tokens is kept in the hidden state $h_t$ of the cell. This approximation works quite well with short sequences, but for longer sequences vanilla RNN cells have proved to have problems with "remembering" distant timesteps in the past. That is why different RNN cell architectures have been developed, among which **LSTM cell** stood out for the capability of modeling larger sequences with an additional long-term memory.
+<span>$\theta^{\*} = arg\,max_{\theta}\sum_{(I, S)}log\,p(S|I;\theta)$</span>
+
+where <span>$(I, S)$</span> is an image-caption pair in the training set and the model parameters <span>$\theta$</span> are the model weights we apprehend with backpropagation. 
+
+Since <span>$S$</span> is considered to be a sequence of $N+1$ tokens $S_0, S_1, ..., S_N$ (where we use $S_0$ and $S_N$ to denote two special tokens <span>$\langle start \rangle$</span> and <span>$\langle end \rangle$</span>), we can apply the **chain rule of probability**: 
+
+<span>$p(S|I) = P(S_0, S_1, ..., S_N|I) = \prod_{t=0}^NP(S_t|I, S_0, S_1, ..., S_{t-1})$</span> 
+
+and model the last expression in the equations using an RNN, where information about the last $t-1$ tokens is kept in the hidden state $h_t$ of the cell. This approximation works quite well with short sequences, but for longer sequences vanilla RNN cells have proved to have problems with "remembering" distant timesteps in the past. That is why different RNN cell architectures have been developed, among which **LSTM cell** stood out for the capability of modeling larger sequences with an additional long-term memory.
 
 During training, at the first timestep, the network is provided with a **dense image encoding** produced by the CNN encoder and, subsequently, it starts receiving the tokens of the caption associated to the image as its input for each new timestep. Also for these tokens, the input is a dense representation that in the context of NLP we call a **word embedding**. The following diagram shows the inner workings of the network during training:
 
@@ -40,7 +48,7 @@ At inference time, we don't have any ground truth: the only possibility for the 
 
 Now that we have a good mathematical and architectural understanding of the model we can see how to implement it with TensorFlow and Keras!
 
-## :file_folder: Preparing the Data
+## :file_folder: Prepare the Data
 
 In this tutorial I want to show how to create a **custom tokenizer with Spacy** and how to use **TensorFlow's Data API** to provide data to our model. 
 
@@ -136,7 +144,7 @@ The `fit` method takes a list of texts as input and it fills the vocabulary acco
 
 The final methods `text_to_sequence` and `sequence_to_text` perform the conversions for the captions. When we use `text_to_sequence`, **0-padding is used to pad the sequences to the length of the longest caption** we obtained when fitting the model. This is not a strict requirement of the theoretical usage of an RNN, which can work with sequences of any length, but it is needed by Keras since we need to work with fixed-shape tensors.
 
-### :vhs: Create TFRecords
+### :vhs: Create and Store TFRecords
 
 TensorFlow has its own preferred binary file format to store and read data. It is not mandatory to use it, but in this tutorial we will see how to **create some TFRecords out of the images and captions of our dataset**.
 
@@ -253,7 +261,7 @@ Finally, since it's better to create multiple TFRecords instead of a single TFRe
 
 Now that we have our data, let's create the model!
 
-## :brain: The Model
+## :construction: Build the Model
 
 We'll use the Subclassing API to create a custom Keras model.
 
@@ -332,7 +340,7 @@ Before passing to the decoder, we need an `Embedding` layer, which associates de
 
 Let's see how we can train this network!
 
-## :hammer: Training the Model
+## :hammer: Train the Model
 
 The first thing we need is to create some `tf.data.Dataset`s out of the TFRecords.
 
@@ -400,10 +408,6 @@ In this function we parse the examples and transform the images with the `incept
 
 We read the tensor containing multiple captions for each image (remember that an example is made of an image, together with ALL the captions associated to it), and divide the example into many examples (using `flat_map`), made of pairs image-caption (single caption). An output caption is the expected output of the network for a given example: it is the same caption sequence, shifted one position to the left (we want to predict the second word from the first word and so on), and all the elements in this sequence are decreased by one (since we want the 0-th neuron of the output layer to correspond to the token `<start>` and not to the padding tokens).
 
-At each timestep we provide the model with the **tokens of the real caption**: this is called **teacher forcing**. In some way we are helping the model to not make a chain of errors, when it makes a mistake over some predictions. If we let the model ingest at each timestep the word it predicted at the previous timestep with the highest probability, it will probably chain a lot of errors, if it has made an error at the previous step. So, during training we can actually help the model.
-
-At inference time our model will be **auto-regressive**, meaning that it can incur in the trap explained above. This problem is called **exposure bias**.
-
 Now training the model is easy:
 
 ```python
@@ -427,11 +431,11 @@ We build the model (since it is required for showing the summary of models made 
 
 Our loss function is the sparse categorical cross-entropy, corresponding to the loss explained when we saw the paper, where we ignore the `-1` classes in the ground-truth. Why? Because they correspond to padding, since we decreased the elements of the sequence by one.
 
-## :loop: Model Prediction with Beam Search
+## :loop: Predict with Beam Search
 
 Wow! We covered so much stuff, but now we are finally ready to make predictions with our model.
 
-At each timestep our network provides us with the probability distribution $P(S_t|I,S_0,...,S_{t-1})$. In a perfect world we could just choose the element in the vocabulary that maximizes this probability (the softmax result) at each timestep. But this doesn't provide optimal results :confounded:. This is because the RNN provides just an approximation of the real underlying distribution.
+At each timestep our network provides us with the probability distribution <span>$P(S_t|I,S_0,...,S_{t-1})$</span>. In a perfect world we could just choose the element in the vocabulary that maximizes this probability (the softmax result) at each timestep. But this doesn't provide optimal results :confounded:. This is because **the RNN provides just an approximation of the real underlying distribution**.
 
 In these cases we use **beam search**! This is a technique with which we consider more possible outputs at each timestep. We could see it as an improved Greedy search. Let's implement the beam search for model prediction:
 
