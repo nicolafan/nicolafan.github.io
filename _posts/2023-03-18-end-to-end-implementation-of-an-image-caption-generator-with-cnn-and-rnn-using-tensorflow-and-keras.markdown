@@ -503,7 +503,7 @@ Larger beam widths will provide better results. They will also require more proc
 
 This was a long tutorial, but hopefully you had a good grasp of all the phases required to build a Tensorflow/Keras model, which uses images and texts as inputs. In this tutorial we saw:
 
-* How the authors of *Show and Tell: A Neural Image Caption Generator* implemented an end-to-en neural network for image captioning using CNN and RNN.
+* How the authors of *Show and Tell: A Neural Image Caption Generator* implemented an end-to-end neural network for image captioning using CNN and RNN.
 
 * How to create a custom tokenizer using Spacy, which can be used to face this challenge with captions of multiple languages.
 
