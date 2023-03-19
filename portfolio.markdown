@@ -4,7 +4,7 @@ title: Portfolio
 permalink: /portfolio/
 ---
 
-These are some of my projects that are not related to university or work (in chronological order on the date I started working on them).
+These are some of my projects that are not related to university or work.
 
 ## :camera: Image Captioning with CNN and RNN
 A Tensorflow/Keras implementation of the model proposed in the 2015 paper ["Show and tell: A neural image caption generator."](https://arxiv.org/abs/1411.4555).
@@ -51,7 +51,7 @@ Pyker is a **Desktop Poker Texas Hold'Em** game made with Python and Pygame!
 
 I've developed this game because I wanted to challenge myself with the implementation of a poker AI. Right now the game has the simplest possible AI for the bots: they just play randomly. I hope to implement different techniques in the future for making the bots "intelligent".
 
-The implementation of the game and the interface should be finished, but I wish to refactor the code and to add tests in the future.
+The implementation of the game and the interface should be finished, but I wish to refactor the code and to add more tests in the future.
 
 ### :link: Links
 
