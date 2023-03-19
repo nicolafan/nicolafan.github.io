@@ -6,13 +6,13 @@ categories: blog tensorflow keras image-captioning computer-vision nlp neural-ne
 ---
 
 ## :camera: Image Captioning: an Overview 
-**Image captioning** is a **Computer Vision** task which consists in the **generation of a textual description about the content of a given image**.
+**Image captioning** is a **Computer Vision** task that consists in the **generation of a textual description of the content of a given image**.
 
-This is a much more harder task than classifying an image based on its content, since it lies at the intersection between Computer Vision and Natural Language generation and deals with the creation of a **model that is capable of understanding and describing the scene**.
+This is a much harder task than classifying an image based on its content, since it lies at the intersection between Computer Vision and Natural Language generation and deals with the creation of a **model that is capable of understanding and describing the scene**.
 
 This task is extremely useful: imagine having a model capable of writing the `alt` image attribute for HTML pages with a good description of the image, or a model that could be used by screen readers to describe an image when it is not accompanied by an alternative text.
 
-In this blog post we will see how to implement a neural image caption generator inspired to the 2015 paper *[Show and Tell: A Neural Image Caption Generator](https://arxiv.org/abs/1411.4555)*, using TensorFlow and Keras.
+In this blog post, we will see how to implement a neural image caption generator inspired by the 2015 paper *[Show and Tell: A Neural Image Caption Generator](https://arxiv.org/abs/1411.4555)*, using TensorFlow and Keras.
 
 A full implementation of the content of this tutorial is available on [this GitHub repo](https://github.com/nicolafan/image-captioning-cnn-rnn).
 
@@ -20,7 +20,7 @@ A full implementation of the content of this tutorial is available on [this GitH
 
 In 2015 Vinyals, Oriol, et al. published the paper *Show and Tell: A Neural Image Caption Generator*, in which they proposed for the first time an **end-to-end system** for neural image caption generation, inspired by the **encoder-decoder** architectures previously proposed in the field of Machine Translation.
 
-Their model architecture is composed of a **Convolutional Neural Network** used as an encoder for the image (Show) and a **Recurrent Neural Network** which receives the image encoding as an input and produces a caption for the image (Tell). In this way they put together the best Deep Learning architectures for working with images (CNN) and with sequence data (RNN). Today, RNN are being substituted by **Transformers** for NLP tasks, but they are still extensively used for working with other types of sequences (and they were the state-of-the-art for neural text processing in 2015).
+Their model architecture is composed of a **Convolutional Neural Network** used as an encoder for the image (Show) and a **Recurrent Neural Network** which receives the image encoding as input and produces a caption for the image (Tell). In this way, they put together the best Deep Learning architectures for working with images (CNN) and with sequence data (RNN). Today, RNNs are being substituted by **Transformers** for NLP tasks, but they are still extensively used for working with other types of sequences (and they were the state-of-the-art for neural text processing in 2015).
 
 Mathematically, we want to train a Neural Network for producing the sequence of words <span>$S$</span> that maximizes the conditional probability <span>$p(S|I)$</span>, where <span>$I$</span> is the input image.
 
@@ -28,7 +28,7 @@ Based on this consideration, the training process will consist in finding the be
 
 <span>$\theta^{\*} = arg\,max_{\theta}\sum_{(I, S)}log\,p(S|I;\theta)$</span>
 
-where <span>$(I, S)$</span> is an image-caption pair in the training set and the model parameters <span>$\theta$</span> are the model weights we apprehend with backpropagation. 
+where <span>$(I, S)$</span> is an image-caption pair in the training set, and the model parameters <span>$\theta$</span> are the model weights we apprehend with backpropagation. 
 
 Since <span>$S$</span> is considered to be a sequence of $N+1$ tokens $S_0, S_1, ..., S_N$ (where we use $S_0$ and $S_N$ to denote two special tokens <span>$\langle start \rangle$</span> and <span>$\langle end \rangle$</span>), we can apply the **chain rule of probability**: 
 
@@ -36,23 +36,23 @@ Since <span>$S$</span> is considered to be a sequence of $N+1$ tokens $S_0, S_1,
 
 and model the last expression in the equations using an RNN, where information about the last $t-1$ tokens is kept in the hidden state $h_t$ of the cell. This approximation works quite well with short sequences, but for longer sequences vanilla RNN cells have proved to have problems with "remembering" distant timesteps in the past. That is why different RNN cell architectures have been developed, among which **LSTM cell** stood out for the capability of modeling larger sequences with an additional long-term memory.
 
-During training, at the first timestep, the network is provided with a **dense image encoding** produced by the CNN encoder and, subsequently, it starts receiving the tokens of the caption associated to the image as its input for each new timestep. Also for these tokens, the input is a dense representation that in the context of NLP we call a **word embedding**. The following diagram shows the inner workings of the network during training:
+During training, at the first timestep, the network is provided with a **dense image encoding** produced by the CNN encoder and, subsequently, it starts receiving the tokens of the caption associated with the image as its input for each new timestep. Also for these tokens, the input is a dense representation that in the context of NLP we call a **word embedding**. The following diagram shows the inner workings of the network during training:
 
 ![Diagram showing how model training works. The CNN produces a dense image encoding and the LSTM cells output a probability distribution over the vocabulary at each timestep](/assets/images/training_model.png)
 
 As we can see, at each timestep, the model performs a **multi-class classification** over the word vocabulary, outputting the probability that each word follows its prefix. The **negative log probability of the actual word** is used as the loss for each timestep, according to the maximization formula and the chain rule factorization we previously saw. The losses at each timestep are summed over the entire sequence and then averaged over the batch, to perform a single Gradient Descent step and adjust the model parameters.
 
-We focus particularly on the fact that, at each timestep, the model obtains the words of the real caption as its inputs. This approach is also called **teacher forcing**: we don't want the model to use its own output to feed itself at training time. This is because errors would be amplified when the model produces wrong outputs. This problem is called **exposure bias**.
+We focus particularly on the fact that, at each timestep, the model obtains the words of the real caption as its input. This approach is also called **teacher forcing**: we don't want the model to use its output to feed itself at training time. This is because errors would be amplified when the model produces wrong outputs. This problem is called **exposure bias**.
 
-At inference time, we don't have any ground truth: the only possibility for the model will be to feed itself with the token outputted at the previous timestep. **Beam search** is a technique used to produce better sequence outputs with these kind of models.
+At inference time, we don't have any ground truth: the only possibility for the model will be to feed itself with the token outputted at the previous timestep. **Beam search** is a technique used to produce better sequence outputs with this kind of model.
 
 Now that we have a good mathematical and architectural understanding of the model we can see how to implement it with TensorFlow and Keras!
 
 ## :file_folder: Prepare the Data
 
-In this tutorial I want to show how to create a **custom tokenizer with Spacy** and how to use **TensorFlow's Data API** to provide data to our model. 
+In this tutorial, I want to show how to create a **custom tokenizer with Spacy** and how to use **TensorFlow's Data API** to provide data to our model. 
 
-You will need a dataset of images and correlated textual captions to go along with this tutorial. Maybe you have your own dataset but, in case you just want to try things out, you can search for the Flickr8k dataset, a collection of images from Flickr, where each images is associated with 5 different captions.
+You will need a dataset of images and correlated textual captions to go along with this tutorial. Maybe you have your dataset but, in case you just want to try things out, you can search for the Flickr8k dataset, a collection of images from Flickr, where each image is associated with 5 different captions.
 
 ### :scissors: Create a Custom Spacy Tokenizer
 
@@ -132,13 +132,13 @@ class CustomSpacyTokenizer:
         return " ".join(inv_vocab[x] for x in sequence if x >= 1)
 ```
 
-It has four methods: the `__init__` instantiates a tokenizer with a vocabulary of words whose size must be at most `vocab_size`. The intiial vocabulary just contains three special tokens we will use in our sequences, namely:
+The tokenizer has four methods: the `__init__` instantiates a tokenizer with a vocabulary of words whose size must be at most `vocab_size`. The intiial vocabulary just contains three special tokens we will use in our sequences, namely:
 
 * `<start>` to identify the start of a caption.
 * `<end>` to identfy the end of a caption.
-* `<oov>` to identify the words that are so uncommon that they didn't make it in the top `vocab_size` words of our training captions.
+* `<oov>` to identify the words that are so uncommon that they didn't make it to the top `vocab_size` words of our training captions.
 
-The `fit` method takes a list of texts as input and it fills the vocabulary according to these texts. Each text is preprocessed using Spacy, which implements tokenization for English texts in its `en_core_web_sm` model. With Spacy we can just **replace this model with a model for another language to obtain a tokenization process specific for that language**. Another importat aspect is that any logic we want to implement in creating the vocabulary of words can be added here.
+The `fit` method takes a list of texts as input and fills the vocabulary according to these texts. Each text is preprocessed using Spacy, which implements tokenization for English texts in its `en_core_web_sm` model. With Spacy we can just **replace this model with a model for another language to obtain a tokenization process specific ton that language**. Another important aspect is that any logic we want to implement in creating the vocabulary of words can be added here.
 
 `fit` takes the `vocab_size - 3` most common words in the texts and adds them to the vocabulary with an incremental index.
 
@@ -201,7 +201,7 @@ def image_example(image_string, captions, tokenizer):
     return tf.train.Example(features=tf.train.Features(feature=feature))
 ```
 
-The function expects a string representing the image, a list of captions associated to the image and the tokenizer we'll use to transform the captions into sequences. We store examples containing the image, the caption sequences (in a tensor of shape `(N_CAPTIONS_PER_IMAGE, MAX_CAPTION_LEN)`) and additional information about the size of the image.
+The function expects a string representing the image, a list of captions associated to the image and the tokenizer we'll use to transform the captions into sequences. We store examples containing the image, the caption sequences (in a tensor of shape `(N_CAPTIONS_PER_IMAGE, MAX_CAPTION_LEN)`), and additional information about the size of the image.
 
 Finally, this is how we will create and store the TFRecords:
 
@@ -251,11 +251,11 @@ def save_tf_records(
 
 This function takes a `split` (a string between `"train"`, `"val"` and `"test"`), and the `input_dir` path (where the `input_dir` is a directory containing a sub-directory of images called `images` and the .txt files `<split-name>_split_filenames.txt`, where `<split-name>` is the name of the split and each line of the .txt files contains the filename of an image of that split e.g. `example.jpg`).
 
-We take the `output_dir` where a sub-folder for each split will be created to store the records. `captions_df` is a Pandas DataFrame with two columns: `"image"` and `"caption"`, where each row contains the filename of an image and its caption (the dataframe can be unique for all the splits).
+We take the `output_dir` where a sub-folder for each split will be created to store the records. `captions_df` is a Pandas dataframe with two columns: `"image"` and `"caption"`, where each row contains the filename of an image and its caption (the dataframe can be unique for all the splits).
 
-The `tokenizer` is a tokenizer already fit on our captions.
+The `tokenizer` is a tokenizer already fitted on our captions.
 
-Finally, since it's better to create multiple TFRecords instead of a single TFRecord for all the example, we specify the `n_records_per_file`.
+Finally, since it's better to create multiple TFRecords instead of a single TFRecord for all the examples, we specify the `n_records_per_file`.
 
 **We only need to call directly this last function to create the records**. The result will be some directories corresponding to the splits inside the `output_dir`, where each directory contains many TFRecords. A TFRecord will be a collection of images with the corresponding caption sequences contained in a tensor.
 
@@ -263,7 +263,7 @@ Now that we have our data, let's create the model!
 
 ## :construction: Build the Model
 
-We'll use the Subclassing API to create a custom Keras model.
+We'll use the **Subclassing API** to create a custom Keras model.
 
 ```python
 class ShowAndTell(keras.Model):
@@ -406,7 +406,7 @@ With this function we obtain a dataset of `((input_imgs, input_captions), output
 
 In this function we parse the examples and transform the images with the `inception_v3.preprocess_input` function.
 
-We read the tensor containing multiple captions for each image (remember that an example is made of an image, together with ALL the captions associated to it), and divide the example into many examples (using `flat_map`), made of pairs image-caption (single caption). An output caption is the expected output of the network for a given example: it is the same caption sequence, shifted one position to the left (we want to predict the second word from the first word and so on), and all the elements in this sequence are decreased by one (since we want the 0-th neuron of the output layer to correspond to the token `<start>` and not to the padding tokens).
+We read the tensor containing multiple captions for each image (remember that an example is made of an image, together with ALL the captions associated with it), and divide the example into many examples (using `flat_map`), made of pairs image-caption (single caption). An output caption is the expected output of the network for a given example: it is the same caption sequence, shifted one position to the left (we want to predict the second word from the first word and so on), and all the elements in this sequence are decreased by one (since we want the 0-th neuron of the output layer to correspond to the token `<start>` and not to the padding tokens).
 
 Now training the model is easy:
 
@@ -429,15 +429,15 @@ model.fit(train_dataset, validation_data=val_dataset, epochs=epochs)
 
 We build the model (since it is required for showing the summary of models made with the Subclassing API) and we start training it. 
 
-Our loss function is the sparse categorical cross-entropy, corresponding to the loss explained when we saw the paper, where we ignore the `-1` classes in the ground-truth. Why? Because they correspond to padding, since we decreased the elements of the sequence by one.
+Our loss function is the sparse categorical cross-entropy, corresponding to the loss explained when we saw the paper, where we ignore the `-1` classes in the ground-truth. Why? Because they correspond to the padding, since we decreased the elements of the sequence by one.
 
 ## :loop: Predict with Beam Search
 
 Wow! We covered so much stuff, but now we are finally ready to make predictions with our model.
 
-At each timestep our network provides us with the probability distribution <span>$P(S_t|I,S_0,...,S_{t-1})$</span>. In a perfect world we could just choose the element in the vocabulary that maximizes this probability (the softmax result) at each timestep. But this doesn't provide optimal results :confounded:. This is because **the RNN provides just an approximation of the real underlying distribution**.
+At each timestep our network provides us with the probability distribution <span>$P(S_t|I,S_0,...,S_{t-1})$</span>. In a perfect world, we could just choose the element in the vocabulary that maximizes this probability (the softmax result) at each timestep. But this approach doesn't provide optimal results :confounded:. This is because **the RNN provides just an approximation of the real underlying distribution**.
 
-In these cases we use **beam search**! This is a technique with which we consider more possible outputs at each timestep. We could see it as an improved Greedy search. Let's implement the beam search for model prediction:
+In these cases we use **beam search**! This is a technique with which we consider more possible outputs at each timestep. We could see it as an improved Greedy search (in fact Greedy search, which consists in choosing the element with the highest probability at each timestep, is just a beam search with a beam width equal to 1). Let's implement the beam search for model prediction:
 
 ```python
 def predict(model: ShowAndTell, image, tokenizer, beam_width=3):
@@ -485,13 +485,13 @@ def predict(model: ShowAndTell, image, tokenizer, beam_width=3):
     return tokenizer.sequence_to_text(beam[0]["seq"])
 ```
 
-Don't be scared by this function! We start with a beam containin a single hypothesis: a sequence containing the only token `<start>` and with score and normalized score equal to 0.
+Don't be scared by this function! We start with a beam containin a single hypothesis: a sequence containing the only token `<start>` and with the score and normalized score equal to 0.
 
 The explanation of the algorithm is the following:
 
 * For each hypothesis in the beam we apply the model to the hypothesis, to get the output probability distribution of the model for the next word. We sample only the best `beam_width` words. 
 
-* We create the candidates for this hypothesis: a candidate is made of the hypothesis itself, followed by one of the `beam_width` predicted tokens. We compute the score of the candidate by adding the log probability of the last word to the previous score. Finally, we compute the normalized score by dividing the score by the length of the candidate. We need this, otherwise the model will prefer shorter sequences (sequences which produced the `<end>` token before the others).
+* We create the candidates for this hypothesis: a candidate is made of the hypothesis itself, followed by one of the `beam_width` predicted tokens. We compute the score of the candidate by adding the log probability of the last word to the previous score. Finally, we compute the normalized score by dividing the score by the length of the candidate. We need this, otherwise, the model will prefer shorter sequences (sequences which produced the `<end>` token before the others).
 
 * We compare the `beam_width` candidates corresponding to each hypothesis and keep only the best `beam_width` candidates among them.
 
@@ -509,7 +509,7 @@ This was a long tutorial, but hopefully you had a good grasp of all the phases r
 
 * How to store the data inside TFRecords, the file format preferred by TensorFlow.
 
-* How to use the Tensorflow Data API to create datasets out of TFRecords.
+* How to use the TensorFlow Data API to create datasets out of TFRecords.
 
 * What are teacher forcing and the exposure bias.
 
