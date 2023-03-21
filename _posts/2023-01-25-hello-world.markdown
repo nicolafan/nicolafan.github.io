@@ -2,7 +2,7 @@
 layout: post
 title:  "Hello World!"
 date:   2023-01-25 21:15:00 +0100
-categories: blog start computer-science introduction
+categories: personal
 ---
 
 ## :question: Who Am I 

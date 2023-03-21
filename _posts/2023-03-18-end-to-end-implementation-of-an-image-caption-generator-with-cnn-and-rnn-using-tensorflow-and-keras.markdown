@@ -2,7 +2,7 @@
 layout: post
 title:  "End-to-End Implementation of an Image Caption Generator with CNN and RNN using Tensorflow and Keras"
 date:   2023-03-18 16:12:00 +0100
-categories: blog tensorflow keras image-captioning computer-vision nlp neural-networks cnn rnn
+categories: machine-learning
 ---
 
 ## :camera: Image Captioning: an Overview 
