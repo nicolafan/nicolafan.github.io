@@ -5,19 +5,13 @@ permalink: /publications/
 ---
 
 <style>
-    .pub-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
     .pub-card {
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transition: 0.3s;
-        width: calc(50% - 20px); /* Subtract some margin for spacing */
+        width: 100%;
         border-radius: 5px;
         display: block;
-        margin: 10px; /* Add some margin for spacing */
+        margin: auto;
     }
 
     .pub-card:hover {
@@ -30,27 +24,17 @@ permalink: /publications/
     }
 
     .pub-card h2 {
-        margin-top: 0;
         margin-bottom: 0;
-        font-size: 1em
     }
 
     .pub-card h4 {
         margin-top: 0.5em;
         margin-bottom: 0.2em;
-        font-size: 0.8em
     }
 
     .pub-card h5 {
         margin-top: 0.2em;
         margin-bottom: 0.5em;
-        font-size: 0.6em
-    }
-
-    .pub-card p {
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-        font-size: 0.5em
     }
 
     .pub-card button {
@@ -61,7 +45,6 @@ permalink: /publications/
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 0.5em;
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 4px;
@@ -79,7 +62,6 @@ permalink: /publications/
 
 </style>
 
-<div class="pub-container">
 <div class="pub-card">
     <img src="https://cdn.gamma.app/8sbvs4icoang31g/e07b9c6ebc564bf5ad924115b7eb9c13/original/Screenshot-2023-09-24-170020.png" alt="Image">
     <div style="padding: 2px 16px;">
@@ -93,6 +75,5 @@ Captioning: A Preliminary Study</h2>
     <button disabled>Papers with Code</button>
     <button disabled>GitHub</button>
     </div>
-</div>
 </div>
 
