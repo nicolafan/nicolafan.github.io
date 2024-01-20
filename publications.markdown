@@ -12,6 +12,7 @@ permalink: /publications/
         border-radius: 5px;
         display: block;
         margin: auto;
+        background-color: #303030;
     }
 
     .pub-card:hover {
@@ -25,16 +26,22 @@ permalink: /publications/
 
     .pub-card h2 {
         margin-bottom: 0;
+        line-height: 0.9;
     }
 
     .pub-card h4 {
         margin-top: 0.5em;
         margin-bottom: 0.2em;
+        line-height: 0.9;
     }
 
     .pub-card h5 {
         margin-top: 0.2em;
         margin-bottom: 0.5em;
+    }
+
+    .pub-card p {
+        line-height: 1.2;
     }
 
     .pub-card button {
