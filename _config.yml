@@ -39,6 +39,7 @@ plugins:
   - jekyll-sitemap
 
 header_pages:
+  - publications.markdown
   - portfolio.markdown
   - about.markdown
 
