@@ -25,8 +25,9 @@ permalink: /publications/
     }
 
     .pub-card h2 {
+        margin-top: 0;
         margin-bottom: 0;
-        line-height: 0.9;
+        line-height: 1.0;
     }
 
     .pub-card h4 {
@@ -77,7 +78,7 @@ Pretraining and ChatGPT for Artwork
 Captioning: A Preliminary Study</h2>
         <h4>Giovanna Castellano, Nicola Fanelli, Raffaele Scaringi, Gennaro Vessio</h4>
         <h5>FAPER Workshop - ICIAP 2023 (In press)</h5>
-        <p>This paper explores the complex tasks of generating textual descriptions for the images of artworks with neural networks. A novel synthetic dataset of captions for the images in ArtGraph/WikiArt is collected using ChatGPT and is refined with CLIP. A VLP model (GIT) and a vision transformer are fine-tuned using instance weighting and multi-task learning to generate rich and expressive artwork descriptions.</p>
+        <p>This paper explores the complex task of generating textual descriptions for the images of artworks with neural networks. A novel synthetic dataset of captions for the images in ArtGraph/WikiArt is collected using ChatGPT and is refined with CLIP. A VLP model (GIT) and a vision transformer are fine-tuned using instance weighting and multi-task learning to generate rich and expressive artwork descriptions.</p>
         <button disabled>Paper</button>
     <button disabled>Papers with Code</button>
     <button disabled>GitHub</button>
