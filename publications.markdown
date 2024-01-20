@@ -25,7 +25,7 @@ permalink: /publications/
     }
 
     .pub-card h2 {
-        margin-top: 0;
+        margin-top: 0.2em;
         margin-bottom: 0;
         line-height: 1.0;
     }
