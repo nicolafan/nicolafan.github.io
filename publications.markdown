@@ -8,7 +8,7 @@ permalink: /publications/
     .pub-card {
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transition: 0.3s;
-        width: 80%;
+        width: 100%;
         border-radius: 5px;
         display: block;
         margin: auto;
@@ -69,8 +69,8 @@ permalink: /publications/
         <h2>Exploring the Synergy Between Vision-Language
 Pretraining and ChatGPT for Artwork
 Captioning: A Preliminary Study</h2>
-        <h4>Giovanna Castellano, Nicola Fanelli, Raffaele Scaringi, Gennaro Vessio</h5>
-        <h5>FAPER Workshop - ICIAP 2023 (In press)</h6>
+        <h4>Giovanna Castellano, Nicola Fanelli, Raffaele Scaringi, Gennaro Vessio</h4>
+        <h5>FAPER Workshop - ICIAP 2023 (In press)</h5>
         <p>This paper explores the complex tasks of generating textual descriptions for the images of artworks with neural networks. A novel synthetic dataset of captions for the images in ArtGraph/WikiArt is collected using ChatGPT and is refined with CLIP. A VLP model (GIT) and a vision transformer are fine-tuned using instance weighting and multi-task learning to generate rich and expressive artwork descriptions.</p>
         <button disabled>Paper</button>
     <button disabled>Papers with Code</button>
