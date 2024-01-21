@@ -4,7 +4,9 @@ title: About
 permalink: /about/
 ---
 
-![A picture of me](/assets/images/me.png)
+<p align="center" style="margin-bottom: 2em;">
+  <img src="assets/images/me.png" width="200">
+</p>
 
 :wave: I am a Computer Science and Artificial Intelligence PhD student at the University of Bari (Italy), currently in my first year.
 
